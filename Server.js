@@ -7,6 +7,9 @@ const app = express();
 const server = http.createServer(app);
 const io = new Server(server);
 
+// Serve static files
+app.use(express.static(path.resolve(__dirname, "public")));
+
 // Socket.io
 io.on("connection", (socket) => {
   socket.on("user-message", (message) => {
@@ -14,10 +17,9 @@ io.on("connection", (socket) => {
   });
 });
 
-app.use(express.static(path.resolve("./public")));
-
+// Serve index.html at the root path
 app.get("/", (req, res) => {
-  return res.sendFile("/public/index.html");
+  return res.sendFile(path.join(__dirname, "public", "index.html"));
 });
 
-server.listen(9000, () => console.log(`Server started at PORT:9000 `));
+server.listen(9000, () => console.log(`Server started at PORT:9000`));
